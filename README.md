@@ -2,11 +2,11 @@
 ## Projeto para cadeira de compiladores, criar um compilador que gere até código intermediario.
  [x] Analisador Léxico
 
- [ ] Analisador Sintático
+ [] Analisador Sintático
 
- [ ] Analisador Semântico
+ [] Analisador Semântico
 
- [ ] Gerador de Código
+ [] Gerador de Código
 
 ### Passando arquivo argumento pelo eclipse
 
