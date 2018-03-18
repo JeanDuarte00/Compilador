@@ -1,3 +1,6 @@
-'$'
+int main (){
 
-'@'
+   // x recebe 3
+   int x = 3;
+
+}
