@@ -202,10 +202,9 @@ public class Lexer {
 				this.incrementLexema();
 				this.getNextChar();
 				if( !this.isNum() ) {
-					//mensagem de erro	
-					this.erro.logError(1, this.indicador.showPosition(), this.caracter);
-					this.erro.showAllErrors();
-					return new Token(TokensId.ENDFILE.getId(), "ERRO LEXICO");
+					//mensagem de erro					
+					this.erro.logError(1, this.indicador.showPosition(), this.caracter);					
+					
 				}	
 				
 				while( this.isNum() ) {
@@ -338,7 +337,7 @@ public class Lexer {
 			
 			
 		if(this.caracter == '\'') {//aspa simples			
-			this.incrementLexema();
+			
 			this.getNextChar();		
 			
 			if( this.isCharOrNum() ) {
@@ -347,9 +346,9 @@ public class Lexer {
 				this.getNextChar();
 				
 				if(this.caracter == '\'') {
-					this.incrementLexema();
+					
 					this.getNextChar();
-					return new Token(TokensId.PR_CHAR.getId(), TokensId.PR_CHAR.getNome());
+					return new Token(TokensId.PR_CHAR.getId(), this.frase);
 				}else {
 					this.erro.logError(6, this.indicador.showPosition(), this.caracter);
 				
@@ -366,7 +365,7 @@ public class Lexer {
 		
 		
 		//se nenhuma das opções, logo é fim de arquivo
-		return new Token(TokensId.ENDFILE.getId(),"end of file");
+		return new Token(TokensId.ENDFILE.getId(), TokensId.ENDFILE.getNome());
 		
 	}
 	
