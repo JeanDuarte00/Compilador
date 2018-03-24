@@ -15,7 +15,7 @@ public class Main {
 					
 			token = lexer.getNextToken();
 			
-			//System.out.println("tokenID: "+token.getId() +" | "+ "lexema: " + token.getLexema());				
+			System.out.println("tokenID: "+token.getId() +" | "+ "lexema: " + token.getLexema());				
 			
 			
 			if(token.getId() == TokensId.ENDFILE.getId()) {	
