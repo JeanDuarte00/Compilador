@@ -3,14 +3,14 @@ package lexer;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
-public class Error {
+public class Error{
 
 	private Logger logger;
 	private LinkedList<String> ListaErro;
 	
 	public Error() {
 		logger = Logger.getLogger(Lexer.class.getName());
-		this.ListaErro = new LinkedList<>();
+		this.ListaErro = new LinkedList<>();		
 	}
 	
 	public int getQtdErros() {
@@ -19,8 +19,7 @@ public class Error {
 	
 	public void showAllErrors() {		
 		for(String log: this.ListaErro) {
-			this.logger.warning(log);
-			
+			this.logger.warning(log);			
 		}
 	}
 	
