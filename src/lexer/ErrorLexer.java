@@ -3,13 +3,13 @@ package lexer;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
-public class Error{
+public class ErrorLexer{
 
 	private Logger logger;
 	private LinkedList<String> ListaErro;
 	
-	public Error() {
-		logger = Logger.getLogger(Lexer.class.getName());
+	public ErrorLexer() {
+		logger = Logger.getLogger(ErrorLexer.class.getName());
 		this.ListaErro = new LinkedList<>();		
 	}
 	

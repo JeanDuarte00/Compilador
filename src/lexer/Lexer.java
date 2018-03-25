@@ -11,7 +11,7 @@ import java.util.regex.*;
 @SuppressWarnings("unused")
 public class Lexer {
 	
-	private Error erro;
+	private ErrorLexer erro;
 	private File arquivo;
 	private Pointer indicador;
 	private FileReader reader;	
@@ -24,13 +24,16 @@ public class Lexer {
 	private int tipo;
 	boolean start = true;
 	
+	public Pointer getPosicaoArquivo() {
+		return this.indicador;
+	}
 	
 	public Lexer(String args){ // construtor
 		
 		this.frase = new String();				 
 		this.indicador = new Pointer();
 		
-		this.erro = new Error();
+		this.erro = new ErrorLexer();
 		
 		// abri o arquivo para leitura
 		this.arquivo = new File(args);
