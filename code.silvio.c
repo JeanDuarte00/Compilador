@@ -1,37 +1,38 @@
 int main() {
-	    int x,y,z;
-	        float h;int c;float w,k,a;
-		    
-		    k = x;
-		        w = 5/x+y*8+5* 7;
-			    /** /** /*
-			     *        teste &% 
-			     *            ***/
-			    
+	int x,y,z;
+	float h;int c;float w,k,a;
 
-			     
-			    do{
-				    	
-				            w = w + 1;
-					    	
-					        }while  (y<10);
+	k = x;
+	w = 5/x+y*8+5* 7;
+
+	/** /** /*
+	*        teste &% 
+	*            ***/
 
 
-			        y = x;
-			        
-			        while (x>w*8) {
-					       float y,a;
-					               w = w +1;
-						               y = x;
-							           }
 
-				    a = 0;
+	do{
 
-				        if (w != x) 
-						    {
+		w = w + 1;
 
-							            p = 10;
-								        }
+	}while  (y<10);
+
+
+	y = x;
+
+	while (x>w*8) {
+		float y,a;
+		w = w +1;
+		y = x;
+	}
+
+	a = 0;
+
+	if (w != x) 
+	{
+
+		p = 10;
+	}
 
 }
 
