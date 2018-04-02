@@ -40,5 +40,5 @@ Para execultar o .jar : java -jar "NOME_PROJETO.jar" "ARGUMENTO"
 
 ### Compilando e execultando pelo terminal
 
-Para compilar e execultar pelo arquivo Bash
+Para compilar e execultar pelo arquivo de script
 ![alt text](/img/compExec.png "Compile and execute")
