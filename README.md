@@ -38,5 +38,7 @@ Clicar em Finish
 Para execultar o .jar : java -jar "NOME_PROJETO.jar" "ARGUMENTO"
 ![alt text](/img/jarConsp4.png "Jar p4")
 
+### Compilando e execultando pelo terminal
+
 Para compilar e execultar pelo arquivo Bash
 ![alt text](/img/compExec.png "Compile and execute")
