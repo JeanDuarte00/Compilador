@@ -48,3 +48,23 @@ char ::= 'letra'  |  'dígito'         // Uma constante do tipo char (entre aspa
 
      Considere o TAB como equivalente a 4 colunas
 
+# Compilador - Analisador Sintático
+
+
+### BNF para a linguagem proposta
+
+<decl_var> 		::= 	<tipo> <id> {,<id>}* ";"
+<tipo> 			::= 	int | float | char
+<programa>		::=	 int main"("")" <bloco>
+<bloco> 		::= 	“{“ {<decl_var>}* {<comando>}* “}”
+<comando>		::= 	<comando_basico> | <iteracao> | if "("<expr_relacional>")" <comando> {else <comando>}?
+<comando_basico>	::= 	<atribuicao> | <bloco>
+<iteracao> 		::=	 while "("<expr_relacional>")" <comando> | do <comando> while "("<expr_relacional>")"";"
+<atribuicao> 		::=	 <id> "=" <expr_arit> ";"
+<expr_relacional>	::= 	<expr_arit> <op_relacional> <expr_arit>
+<expr_arit> 		::=	 <expr_arit> "+" <termo>   | <expr_arit> "-" <termo> | <termo>
+<termo> 		::= 	<termo> "*" <fator> | <termo> “/” <fator> | <fator>
+<fator> 		::=	 “(“ <expr_arit> “)” | <id> | <real> | <inteiro> | <char>
+<op_relacional> 	::= 	"==", "!=", "<", ">", "<=", ">="
+
+
