@@ -1,6 +1,6 @@
-package lexer;
 
-public enum TokensId {
+
+public enum TokensClasse {
 	ENDFILE(0, "END OF FILE"),
 	CARACTER(1, "LETRA"),
 	DIGITO(2, "NUMERAL"),
@@ -37,16 +37,16 @@ public enum TokensId {
 	PR_IF(34, "P.R IF"),
 	PR_MAIN(35, "P.R MAIN");	
 	
-	private int id;
+	private int classe;
 	private String nome;
 	
-	TokensId(int id, String nome){
-		this.id = id;
+	TokensClasse(int classe, String nome){
+		this.classe = classe;
 		this.nome = nome;
 	}
 
-	public int getId() {
-		return id;
+	public int getClasse() {
+		return this.classe;
 	}
 
 	public String getNome() {

@@ -1,17 +1,16 @@
-package lexer;
 
 public class Token {
 	
-	int id;
+	int classe;
 	String lexema;
 	
 	
-	public int getId() {
-		return id;
+	public int getClasse() {
+		return this.classe;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.classe = id;
 	}
 
 	public String getLexema() {
@@ -23,8 +22,8 @@ public class Token {
 	}
 
 		
-	public Token(int id, String lexema) {
-		this.id = id;
+	public Token(int classe, String lexema) {
+		this.classe = classe;
 		this.lexema = lexema;
 	}
 	

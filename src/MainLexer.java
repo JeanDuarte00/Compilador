@@ -1,6 +1,3 @@
-import lexer.Lexer;
-import lexer.Token;
-import lexer.TokensId;
 
 
 public class MainLexer {
@@ -15,10 +12,10 @@ public class MainLexer {
 					
 			token = lexer.getNextToken();
 			
-			System.out.println("tokenID: "+token.getId() +" | "+ "lexema: " + token.getLexema());				
+			System.out.println("tokenID: "+token.getClasse() +" | "+ "lexema: " + token.getLexema() +"| "+ lexer.getPosicaoArquivo().toString());				
 			
 			
-			if(token.getId() == TokensId.ENDFILE.getId()) {	
+			if(token.getClasse() == TokensClasse.ENDFILE.getClasse()) {	
 				break;
 			}
 		}

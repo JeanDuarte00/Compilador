@@ -1,7 +1,5 @@
 
 
-import parser.Parser;
-
 public class MainParser {
 
 	public static void main(String[] args) {

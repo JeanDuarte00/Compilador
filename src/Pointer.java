@@ -1,4 +1,4 @@
-package lexer;
+
 
 public class Pointer {
 
@@ -30,21 +30,23 @@ public class Pointer {
 	}
 	
 	public  void move(char caracter) {
-		this.moveColuna();
+		
 		if(caracter == '\t') {
-			this.setColuna(this.getColuna()+4);
+			this.setColuna(this.coluna+4);
 						
-		}
+		}else
 		if(caracter == '\n') {
 			this.setColuna(1);
 			this.moveLinha();
+		}else {
+			this.moveColuna();
 		}
 		
 	}
 	
-	public String showPosition() {
+	public String toString() {
 		
-		return "LINHA: "+(this.getLinha())+" , COLUNA: "+(this.getColuna()-1);
+		return "LINHA: "+(this.getLinha())+" , COLUNA: "+(this.getColuna());
 		
 	}
 	

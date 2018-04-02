@@ -1,40 +1,73 @@
-int main() {
-	int x,y,z;
-	float h;int c;float w,k,a;
-
-	k = x;
-	w = 5/x+y*8+5* 7;
-
-	/** /** /*
-	*        teste &% 
-	*            ***/
 
 
+int main (){
 
+	//comentario 1
+
+	int varInt;
+	float varFloat;
+	char varChar1, varChar2;
+
+	varFloat = (varInt*3-varInt/2+(3*varInt-varFloat));
+	
 	do{
+		varInt = varInt + 1;
+		
+		do{
+			varInt = varInt + 2;
+			
+			
+			while( varInt > 3){
+				varInt = varInt + 3;
+			}
+			
+			
+		}while( varInt < 2);
+		
+		while( varInt >= 4){
+			varInt = varInt + 4;
+		}
+		
+				
+	}while( varInt <= 1);
 
-		w = w + 1;
+	//comentario 2
+	
+	varInt = 0;
 
-	}while  (y<10);
 
-
-	y = x;
-
-	while (x>w*8) {
-		float y,a;
-		w = w +1;
-		y = x;
+	if( varInt     <= 0 ){
+	
+		if(varInt <= 300       ){
+			
+			if(   varInt <= 600  ){
+				varInt = varInt + varInt * 3 / varInt - (100+varInt);
+			}
+			
+		}
+		
+		varInt = varInt + 3;
 	}
-
-	a = 0;
-
-	if (w != x) 
-	{
-
-		p = 10;
+	
+	while( varInt > 0){
+		varInt = varInt + 1;
 	}
+	
+	/*multi
+	 comentario
+	  1	
+	*/
+	//int test;
+	do{
+		varFloat = varInt / varInt*2;
+		
+		if( varInt > 200){
+			varInt = varFloat;
+		}
 
+		
+	}while(varFloat < 100);
+
+	'&'
+	
 }
-
-
-

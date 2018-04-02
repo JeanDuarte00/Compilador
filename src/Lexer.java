@@ -1,4 +1,3 @@
-package lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,31 +58,31 @@ public class Lexer {
 	private Token isPalavraReservada() {
 		
 		if(this.frase.equals("int")) {
-			return new Token(TokensId.PR_INT.getId(), TokensId.PR_INT.getNome());
+			return new Token(TokensClasse.PR_INT.getClasse(), TokensClasse.PR_INT.getNome());
 		}else
 		if(this.frase.equals("float")) {
-			return new Token(TokensId.PR_FLOAT.getId(), TokensId.PR_FLOAT.getNome());
+			return new Token(TokensClasse.PR_FLOAT.getClasse(), TokensClasse.PR_FLOAT.getNome());
 		}else
 		if(this.frase.equals("char")) {
-			return new Token(TokensId.PR_CHAR.getId(), TokensId.PR_CHAR.getNome());
+			return new Token(TokensClasse.PR_CHAR.getClasse(), TokensClasse.PR_CHAR.getNome());
 		}else
 		if(this.frase.equals("main")) {
-			return new Token(TokensId.PR_MAIN.getId(), TokensId.PR_MAIN.getNome());
+			return new Token(TokensClasse.PR_MAIN.getClasse(), TokensClasse.PR_MAIN.getNome());
 		}else
 		if(this.frase.equals("if")) {
-			return new Token(TokensId.PR_IF.getId(), TokensId.PR_IF.getNome());
+			return new Token(TokensClasse.PR_IF.getClasse(), TokensClasse.PR_IF.getNome());
 		}else
 		if(this.frase.equals("else")) {
-			return new Token(TokensId.PR_ELSE.getId(), TokensId.PR_ELSE.getNome());
+			return new Token(TokensClasse.PR_ELSE.getClasse(), TokensClasse.PR_ELSE.getNome());
 		}else
 		if(this.frase.equals("for")) {
-			return new Token(TokensId.PR_FOR.getId(), TokensId.PR_FOR.getNome());
+			return new Token(TokensClasse.PR_FOR.getClasse(), TokensClasse.PR_FOR.getNome());
 		}else
 		if(this.frase.equals("do")) {
-			return new Token(TokensId.PR_DO.getId(), TokensId.PR_DO.getNome());
+			return new Token(TokensClasse.PR_DO.getClasse(), TokensClasse.PR_DO.getNome());
 		}else
 		if(this.frase.equals("while")) {
-			return new Token(TokensId.PR_WHILE.getId(), TokensId.PR_WHILE.getNome());
+			return new Token(TokensClasse.PR_WHILE.getClasse(), TokensClasse.PR_WHILE.getNome());
 		}else {		
 			return null;
 		}
@@ -107,6 +106,7 @@ public class Lexer {
 	}
 	
 	private void getNextChar() {		
+		this.indicador.move(this.caracter);
 		try {
 			this.ascii = this.reader.read();
 		} catch (IOException error) {
@@ -115,8 +115,7 @@ public class Lexer {
 		if(this.caracter != '¨') {
 			this.lastChar = this.caracter;
 		}
-		this.caracter = (char)this.ascii;
-		this.indicador.move(this.caracter);
+		this.caracter = (char)this.ascii;		
 	}
 	
 	private void incrementLexema() {
@@ -146,7 +145,7 @@ public class Lexer {
 				
 				this.getNextChar();
 				if( this.ascii == -1 ) {
-					this.erro.logError(4, this.indicador.showPosition(), this.caracter);				
+					this.erro.logError(4, this.indicador.toString(), this.caracter);				
 					
 					return false;
 				}
@@ -171,9 +170,9 @@ public class Lexer {
 		if(this.caracter == '/') { //comentario ou divisao			
 			
 			if( this.isComment() ) {
-				return new Token(TokensId.COMENTARIO.getId(), TokensId.COMENTARIO.getNome());
+				return new Token(TokensClasse.COMENTARIO.getClasse(), TokensClasse.COMENTARIO.getNome());
 			}else {				
-				return new Token(TokensId.DIVISAO.getId(), TokensId.DIVISAO.getNome());
+				return new Token(TokensClasse.DIVISAO.getClasse(), TokensClasse.DIVISAO.getNome());
 			}
 		
 		}else
@@ -190,7 +189,7 @@ public class Lexer {
 			if(tokeN != null) {
 				return tokeN;
 			} 			
-			return new Token(TokensId.IDENTIFICADOR.getId(),this.frase);			
+			return new Token(TokensClasse.IDENTIFICADOR.getClasse(),this.frase);			
 		}else
 		
 			
@@ -206,7 +205,7 @@ public class Lexer {
 				this.getNextChar();
 				if( !this.isNum() ) {
 					//mensagem de erro					
-					this.erro.logError(1, this.indicador.showPosition(), this.caracter);					
+					this.erro.logError(1, this.indicador.toString(), this.caracter);					
 					
 				}	
 				
@@ -214,9 +213,9 @@ public class Lexer {
 					this.incrementLexema();
 					this.getNextChar();
 				}				
-				return new Token(TokensId.DECIMAL.getId(),this.frase);
+				return new Token(TokensClasse.DECIMAL.getClasse(),this.frase);
 			}
-			return new Token(TokensId.INTEIRO.getId(),this.frase);
+			return new Token(TokensClasse.INTEIRO.getClasse(),this.frase);
 		}else
 		
 			
@@ -227,9 +226,9 @@ public class Lexer {
 			if(this.caracter == '=') {
 				this.incrementLexema();
 				this.getNextChar();				
-				return new Token(TokensId.DIFERENCA.getId(), TokensId.DIFERENCA.getNome());
+				return new Token(TokensClasse.DIFERENCA.getClasse(), TokensClasse.DIFERENCA.getNome());
 			}else {
-				this.erro.logError(2, this.indicador.showPosition(), this.caracter);
+				this.erro.logError(2, this.indicador.toString(), this.caracter);
 				
 			}
 		}else
@@ -243,9 +242,9 @@ public class Lexer {
 				this.incrementLexema();
 				this.getNextChar();
 				
-				return new Token(TokensId.IGUALDADE.getId(), TokensId.IGUALDADE.getNome());
+				return new Token(TokensClasse.IGUALDADE.getClasse(), TokensClasse.IGUALDADE.getNome());
 			}else {
-				return new Token(TokensId.ATRIBUICAO.getId(), TokensId.ATRIBUICAO.getNome());
+				return new Token(TokensClasse.ATRIBUICAO.getClasse(), TokensClasse.ATRIBUICAO.getNome());
 			}
 			
 		}else
@@ -254,7 +253,7 @@ public class Lexer {
 		if(this.caracter == '+') {
 			this.incrementLexema();
 			this.getNextChar();
-			return new Token(TokensId.SOMA.getId(), TokensId.SOMA.getNome());
+			return new Token(TokensClasse.SOMA.getClasse(), TokensClasse.SOMA.getNome());
 			
 		}else
 			
@@ -262,7 +261,7 @@ public class Lexer {
 		if(this.caracter == '-') {
 			this.incrementLexema();
 			this.getNextChar();
-			return new Token(TokensId.SUBTRACAO.getId(), TokensId.SUBTRACAO.getNome());
+			return new Token(TokensClasse.SUBTRACAO.getClasse(), TokensClasse.SUBTRACAO.getNome());
 			
 		}else
 				
@@ -270,7 +269,7 @@ public class Lexer {
 		if(this.caracter == '*') {
 			this.incrementLexema();
 			this.getNextChar();
-			return new Token(TokensId.MULTIPLICAO.getId(), TokensId.MULTIPLICAO.getNome());
+			return new Token(TokensClasse.MULTIPLICAO.getClasse(), TokensClasse.MULTIPLICAO.getNome());
 		
 		}else
 			
@@ -282,9 +281,9 @@ public class Lexer {
 			if(this.caracter == '=') {
 				this.incrementLexema();
 				this.getNextChar();
-				return new Token(TokensId.MENOR_IGUAL.getId(), TokensId.MENOR_IGUAL.getNome());
+				return new Token(TokensClasse.MENOR_IGUAL.getClasse(), TokensClasse.MENOR_IGUAL.getNome());
 			}else {
-				return new Token(TokensId.MENOR_QUE.getId(), TokensId.MENOR_QUE.getNome());
+				return new Token(TokensClasse.MENOR_QUE.getClasse(), TokensClasse.MENOR_QUE.getNome());
 			}			
 		}else
 			
@@ -296,46 +295,46 @@ public class Lexer {
 			if(this.caracter == '=') {
 				this.incrementLexema();
 				this.getNextChar();
-				return new Token(TokensId.MAIOR_IGUAL.getId(), TokensId.MAIOR_IGUAL.getNome());
+				return new Token(TokensClasse.MAIOR_IGUAL.getClasse(), TokensClasse.MAIOR_IGUAL.getNome());
 			}else {
-				return new Token(TokensId.MAIOR_QUE.getId(), TokensId.MAIOR_QUE.getNome());
+				return new Token(TokensClasse.MAIOR_QUE.getClasse(), TokensClasse.MAIOR_QUE.getNome());
 			}			
 		}else
 			
 			
 		if(this.caracter == ',') {			
 			this.getNextChar();
-			return new Token(TokensId.VIRGULA.getId(), TokensId.VIRGULA.getNome());
+			return new Token(TokensClasse.VIRGULA.getClasse(), TokensClasse.VIRGULA.getNome());
 		}else
 			
 		
 		if(this.caracter == ';') {
 			this.getNextChar();
-			return new Token(TokensId.PONTO_VIRGULA.getId(), TokensId.PONTO_VIRGULA.getNome());
+			return new Token(TokensClasse.PONTO_VIRGULA.getClasse(), TokensClasse.PONTO_VIRGULA.getNome());
 		}else
 			
 			
 		if(this.caracter == '(') {
 			this.getNextChar();
-			return new Token(TokensId.ABRE_PARENTESES.getId(), TokensId.ABRE_PARENTESES.getNome());
+			return new Token(TokensClasse.ABRE_PARENTESES.getClasse(), TokensClasse.ABRE_PARENTESES.getNome());
 		}else
 
 			
 		if(this.caracter == ')') {
 			this.getNextChar();
-			return new Token(TokensId.FECHA_PARENTESES.getId(), TokensId.FECHA_PARENTESES.getNome());
+			return new Token(TokensClasse.FECHA_PARENTESES.getClasse(), TokensClasse.FECHA_PARENTESES.getNome());
 		}else
 			
 			
 		if(this.caracter == '{') {
 			this.getNextChar();
-			return new Token(TokensId.ABRE_BLOCO.getId(), TokensId.ABRE_BLOCO.getNome());
+			return new Token(TokensClasse.ABRE_BLOCO.getClasse(), TokensClasse.ABRE_BLOCO.getNome());
 		}else
 			
 			
 		if(this.caracter == '}') {
 			this.getNextChar();
-			return new Token(TokensId.FECHA_BLOCO.getId(), TokensId.FECHA_BLOCO.getNome());
+			return new Token(TokensClasse.FECHA_BLOCO.getClasse(), TokensClasse.FECHA_BLOCO.getNome());
 		}else
 			
 			
@@ -351,14 +350,14 @@ public class Lexer {
 				if(this.caracter == '\'') {
 					
 					this.getNextChar();
-					return new Token(TokensId.PR_CHAR.getId(), this.frase);
+					return new Token(TokensClasse.PR_CHAR.getClasse(), this.frase);
 				}else {
-					this.erro.logError(6, this.indicador.showPosition(), this.caracter);
+					this.erro.logError(6, this.indicador.toString(), this.caracter);
 				
 				}
 				
 			}else {
-				this.erro.logError(5, this.indicador.showPosition(), this.caracter);
+				this.erro.logError(5, this.indicador.toString(), this.caracter);
 				
 			}
 		}
@@ -368,7 +367,7 @@ public class Lexer {
 		
 		
 		//se nenhuma das opções, logo é fim de arquivo
-		return new Token(TokensId.ENDFILE.getId(), TokensId.ENDFILE.getNome());
+		return new Token(TokensClasse.ENDFILE.getClasse(), TokensClasse.ENDFILE.getNome());
 		
 	}
 	
