@@ -9,13 +9,13 @@ public class Parser{
 	private int bloco;
 	private ErrorParser error;
 	Lexer lexer;
-	TokenTable tokenTable;
+	TabelaSimbolos variaveisEscopo;
 	
 	// Constructor	
 	public Parser (String arquivo){
 		this.error = new ErrorParser();
 		this.lexer = new Lexer(arquivo);		
-		this.tokenTable = new TokenTable();
+		this.variaveisEscopo = new TabelaSimbolos();
 		this.bloco = 0;
 	}
 
@@ -103,7 +103,9 @@ public class Parser{
 		if( !this.isFirstBloco() ) {			
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "{", token.getLexema());	
 		}		
-		//this.bloco++;				
+		
+		this.variaveisEscopo.criarNovoBloco();
+		
 		this.getNextToken();
 		
 		while( this.isFirstDeclaracaoDeVariaveis() ) {
@@ -118,8 +120,8 @@ public class Parser{
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "}", token.getLexema());
 		}
 		this.getNextToken();
-		//this.tokenTable.matarBloco(this.bloco);			
-		//this.bloco--;
+					
+		this.variaveisEscopo.deletarBloco();
 	}
 	
 	
@@ -187,13 +189,17 @@ public class Parser{
 		return false;
 	}
 	public void declaracaoDeVariaveis() {
-		//Token tipoPego = token;					
+		Token tipoPego = token;					
 		this.getNextToken();
 		if( token.getClasse() != TokensClasse.IDENTIFICADOR.getClasse() ) {//erro, deve ter um identificador			
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "1 identificador(es)", token.getLexema());
 		}		
-		//Variavel var = new Variavel( tipoPego.getId(), token.getLexema());		
-		//this.tokenTable.indexOf(bloco).add(var);
+		
+		Variavel var1 = new Variavel( tipoPego.getClasse(), token.getLexema());
+		if( !this.variaveisEscopo.existe(var1) ) {
+			this.variaveisEscopo.inserirEmBloco(var1);	
+		}
+		
 			
 		this.getNextToken();				
 		while( token.getClasse() == TokensClasse.VIRGULA.getClasse() ){
@@ -203,8 +209,10 @@ public class Parser{
 				this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "identificador(es)", token.getLexema());
 			}
 			
-			//Variavel var1 = new Variavel( tipoPego.getId(), token.getLexema());		
-			//this.tokenTable.indexOf(bloco).add(var1);
+			Variavel var2 = new Variavel( tipoPego.getClasse(), token.getLexema());		
+			if( !this.variaveisEscopo.existe(var2) ) {
+				this.variaveisEscopo.inserirEmBloco(var2);	
+			}
 			
 			this.getNextToken();
 		}

@@ -2,7 +2,7 @@
 ## Projeto para cadeira de compiladores, criar um compilador que gere até código intermediario.
 - [x] Analisador Léxico
 
-- [ ] Analisador Sintático
+- [x] Analisador Sintático
 
 - [ ] Analisador Semântico
 
