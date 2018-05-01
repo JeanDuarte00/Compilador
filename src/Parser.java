@@ -8,8 +8,8 @@ public class Parser{
 	@SuppressWarnings("unused")
 	private int bloco;
 	private ErrorParser error;
-	Lexer lexer;
-	TabelaSimbolos variaveisEscopo;
+	private Lexer lexer;
+	private TabelaSimbolos variaveisEscopo;
 	
 	// Constructor	
 	public Parser (String arquivo){
@@ -31,8 +31,7 @@ public class Parser{
 				this.error.showAllErrors();
 				System.exit(0);
 			}
-			
-			
+
 		} catch (IOException error) {
 			
 			error.getMessage();
@@ -154,6 +153,7 @@ public class Parser{
 		return false;
 	}
 	public void atribuicao() {
+		Token var1 = token;
 		
 		if( isFirstAtribuicao() ) {		
 			this.getNextToken();
@@ -189,16 +189,17 @@ public class Parser{
 		return false;
 	}
 	public void declaracaoDeVariaveis() {
-		Token tipoPego = token;					
+		Token tipoPego = token;	
+		Variavel var;
+		
 		this.getNextToken();
 		if( token.getClasse() != TokensClasse.IDENTIFICADOR.getClasse() ) {//erro, deve ter um identificador			
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "1 identificador(es)", token.getLexema());
 		}		
 		
-		Variavel var1 = new Variavel( tipoPego.getClasse(), token.getLexema());
-		if( !this.variaveisEscopo.existe(var1) ) {
-			this.variaveisEscopo.inserirEmBloco(var1);	
-		}
+		var = new Variavel( tipoPego.getClasse(), token.getLexema());
+		this.variaveisEscopo.add(var);	
+		
 		
 			
 		this.getNextToken();				
@@ -209,10 +210,9 @@ public class Parser{
 				this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "identificador(es)", token.getLexema());
 			}
 			
-			Variavel var2 = new Variavel( tipoPego.getClasse(), token.getLexema());		
-			if( !this.variaveisEscopo.existe(var2) ) {
-				this.variaveisEscopo.inserirEmBloco(var2);	
-			}
+			var = new Variavel( tipoPego.getClasse(), token.getLexema());			
+			this.variaveisEscopo.add(var);	
+			
 			
 			this.getNextToken();
 		}
@@ -220,7 +220,7 @@ public class Parser{
 		if( token.getClasse() != TokensClasse.PONTO_VIRGULA.getClasse() ) {//erro, deve ter um identificador				
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), ";", token.getLexema());
 		}		
-		this.getNextToken();	
+		this.getNextToken();
 	}
 	
 	
@@ -424,9 +424,15 @@ public class Parser{
 	public void expAritmetica() {
 		this.termo();
 				
+		exp();
+	}
+	private void exp() {
+		
 		if( token.getClasse() == TokensClasse.SOMA.getClasse() || token.getClasse() == TokensClasse.SUBTRACAO.getClasse() ) {			
 			this.getNextToken();
-			this.expAritmetica();
+			this.termo();
+			this.exp();
+			//this.expAritmetica();
 		}
 	}
 	
@@ -442,9 +448,10 @@ public class Parser{
 	public void termo() {
 		this.fator();
 				
-		if( token.getClasse() == TokensClasse.MULTIPLICAO.getClasse() || token.getClasse() == TokensClasse.DIVISAO.getClasse() ) {	
+		while( token.getClasse() == TokensClasse.MULTIPLICAO.getClasse() || token.getClasse() == TokensClasse.DIVISAO.getClasse() ) {	
 			this.getNextToken();
-			this.termo();
+			this.fator();
+			
 		}		
 	}
 	

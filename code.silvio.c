@@ -6,13 +6,19 @@ int main (){
 
 	int varInt;
 	float varFloat;
-	char varChar1, varChar2;
+	char varChar1, varChar2; 
+	
 
+	varFlaot = 'g'/'h';
 	varFloat = (varInt*3-varInt/2+(3*varInt-varFloat));
 	
+	
+	
 	do{
-		varInt = varInt + 1;
+		int varFloat;
 		
+		varInt = varInt + 1;
+			
 		do{
 			varInt = varInt + 2;
 			
@@ -68,6 +74,6 @@ int main (){
 		
 	}while(varFloat < 100);
 
-	'&'
+	
 	
 }

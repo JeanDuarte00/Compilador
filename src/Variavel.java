@@ -2,8 +2,12 @@
 public class Variavel {
 
 	private int tipoVar;
-	private String nomeVar;
+	private String nomeVar; // lexema do identificador
 	
+	
+	/**
+	 * Nome é quivalente ao lexema
+	 * */
 	public Variavel(int tipo, String nome) {
 		this.tipoVar = tipo;
 		this.nomeVar = nome;

@@ -14,10 +14,20 @@ public class TabelaSimbolos {
 		this.pilha.push( new Grau() );
 	}
 	
-	public void inserirEmBloco(Variavel minhaVar){
-		Grau helper = this.pilha.pop();
-		helper.getVarLista().add(minhaVar);
-		this.pilha.push(helper);
+	
+	public void add(Variavel minhaVar){
+		
+		
+		Grau helper = this.pilha.pop();	
+		for(Variavel var : helper.getVarLista()) {
+			if( var.getNomeVar().equals(minhaVar.getNomeVar()) ) {
+				System.out.println("\033[91m"+"Erro: " + var.getNomeVar() + " já declarada no mesmo escopo");
+				System.exit(0);
+			}
+		}
+	
+		helper.add(minhaVar);
+		this.pilha.push(helper);		
 	}
 	
 	public boolean existe(Variavel varCheck) {
@@ -33,7 +43,6 @@ public class TabelaSimbolos {
 	public void deletarBloco() {
 		Grau helper = this.pilha.pop();
 		helper.getVarLista().clear();
-		this.pilha.pop();
 	}
 	
 	

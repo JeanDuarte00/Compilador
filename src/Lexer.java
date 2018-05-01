@@ -14,14 +14,14 @@ public class Lexer {
 	private File arquivo;
 	private Pointer indicador;
 	private FileReader reader;	
-	private String frase;
-	private Matcher matcher;
-	private Pattern pattern;
-	private char caracter = '¨';
+	private String frase;	
+	private char caracter = ' ';
 	private char lastChar;
 	private int ascii;
 	private int tipo;
 	boolean start = true;
+	private Pattern charEspeciais = Pattern.compile("[@#$¨?~&]");
+	private Matcher matcher;	
 	
 	public Pointer getPosicaoArquivo() {
 		return this.indicador;
@@ -112,10 +112,16 @@ public class Lexer {
 		} catch (IOException error) {
 			error.getMessage();
 		}
-		if(this.caracter != '¨') {
+		if(this.caracter != ' ') {
 			this.lastChar = this.caracter;
 		}
-		this.caracter = (char)this.ascii;		
+		this.caracter = (char)this.ascii;
+	
+		
+		this.matcher = charEspeciais.matcher(this.caracter+"");		
+		if( this.matcher.find() ) {
+			this.erro.logError(7, this.indicador.toString(), this.caracter);			
+		}
 	}
 	
 	private void incrementLexema() {
@@ -350,7 +356,7 @@ public class Lexer {
 				if(this.caracter == '\'') {
 					
 					this.getNextChar();
-					return new Token(TokensClasse.PR_CHAR.getClasse(), this.frase);
+					return new Token(TokensClasse.CARACTER.getClasse(), this.frase);
 				}else {
 					this.erro.logError(6, this.indicador.toString(), this.caracter);
 				

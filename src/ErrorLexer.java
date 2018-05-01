@@ -58,6 +58,11 @@ public class ErrorLexer{
 				System.out.println(msg+caracter+"\nPARA FORMAR UM CHAR PRECISA SER ENTRA ASPAS SIMPLES: 'caracter ou digito' \n\n");
 				System.exit(0);
 				break;
+				
+			case 7:
+				System.out.println(msg+caracter+"\nCARACTERES ESPECIAIS NÃO SÃO VALIDOS \n\n");
+				System.exit(0);
+				break;
 		}
 		
 		
