@@ -4,7 +4,7 @@
 
 - [x] Analisador Sintático
 
-- [ ] Analisador Semântico
+- [x] Analisador Semântico
 
 - [ ] Gerador de Código
 
