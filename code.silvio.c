@@ -2,20 +2,20 @@
 
 int main (){
 
-	//comentario 1
-
-	int varInt;
+	char varChar;
 	float varFloat;
-	char varChar1, varChar2; 
+	int varInt;
 	
-
-	varFlaot = 'g'/'h';
-	varFloat = (varInt*3-varInt/2+(3*varInt-varFloat));
+	varInt = 3;	
+	varFloat = 2 + (varInt - 1) / (2-3+(2-6));
 	
-	
+		
+	//comment
 	
 	do{
 		int varFloat;
+		int varInt;
+		
 		
 		varInt = varInt + 1;
 			

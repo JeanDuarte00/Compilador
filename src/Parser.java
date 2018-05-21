@@ -1,22 +1,25 @@
 
 import java.io.IOException;
 
-
+@SuppressWarnings("unused")
 public class Parser{
 
-	static Token token;
-	@SuppressWarnings("unused")
-	private int bloco;
+	static Token token;		
 	private ErrorParser error;
 	private Lexer lexer;
-	private TabelaSimbolos variaveisEscopo;
+	private TabelaSimbolos tabelaSimbolos;
+	private Checker checker;
+	private int ladoEsqAtrib;
+	private int ladoDirAtrib;
+	
 	
 	// Constructor	
 	public Parser (String arquivo){
+		this.checker = new Checker();
 		this.error = new ErrorParser();
 		this.lexer = new Lexer(arquivo);		
-		this.variaveisEscopo = new TabelaSimbolos();
-		this.bloco = 0;
+		this.tabelaSimbolos = new TabelaSimbolos();	
+		
 	}
 
 	// token lido do lexer
@@ -103,7 +106,8 @@ public class Parser{
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "{", token.getLexema());	
 		}		
 		
-		this.variaveisEscopo.criarNovoBloco();
+		this.tabelaSimbolos.criarNovoBloco();
+		
 		
 		this.getNextToken();
 		
@@ -119,8 +123,8 @@ public class Parser{
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "}", token.getLexema());
 		}
 		this.getNextToken();
-					
-		this.variaveisEscopo.deletarBloco();
+		
+		this.tabelaSimbolos.deletarBloco();
 	}
 	
 	
@@ -153,7 +157,15 @@ public class Parser{
 		return false;
 	}
 	public void atribuicao() {
-		Token var1 = token;
+		
+		//procura saber se existe a variavel no programa, não apenas no escopo
+		if( this.tabelaSimbolos.existe(new Variavel(token.getClasse(), token.getLexema())) == null) {
+			System.out.println("VARIAVEL NÂO DECLARADA, NÂO PODE FAZER ATRIBUIÇÂO " +this.lexer.getPosicaoArquivo());
+		}
+			
+		this.ladoEsqAtrib = this.tabelaSimbolos.getTipoPR(token); // tipo do identificador
+		//System.out.println("LADO ESQ ATRIB: "+this.ladoEsqAtrib);
+		
 		
 		if( isFirstAtribuicao() ) {		
 			this.getNextToken();
@@ -162,7 +174,16 @@ public class Parser{
 				this.getNextToken();				
 				
 				if( this.isFirstExpAritmetica() ) {				
-					this.expAritmetica();
+					this.ladoDirAtrib = this.expAritmetica(); // lado direito da atribuição
+					//System.out.println("LADO DIR ATRIB: "+this.ladoDirAtrib);
+					
+					// verifica se é possivel fazer atribuição
+					this.ladoDirAtrib = checker.atribCheck(this.ladoEsqAtrib, this.ladoDirAtrib);
+					if( this.ladoDirAtrib == -1 ) {
+						System.out.println(lexer.getPosicaoArquivo());
+						System.exit(1); // tipo de atribuição invalido
+					}
+					
 					
 				}else {
 					this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "Expressão aritmetica", token.getLexema());
@@ -189,19 +210,17 @@ public class Parser{
 		return false;
 	}
 	public void declaracaoDeVariaveis() {
-		Token tipoPego = token;	
-		Variavel var;
-		
+		Token tipoPego = token;	// aqui vai pegar a classe da palavra reservada, portanto deve ser transformada para o tipo de dado
+				
 		this.getNextToken();
 		if( token.getClasse() != TokensClasse.IDENTIFICADOR.getClasse() ) {//erro, deve ter um identificador			
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "1 identificador(es)", token.getLexema());
 		}		
 		
-		var = new Variavel( tipoPego.getClasse(), token.getLexema());
-		this.variaveisEscopo.add(var);	
 		
+		this.tabelaSimbolos.add( new Variavel( this.tabelaSimbolos.getTipoPR(tipoPego), token.getLexema()) );	
 		
-			
+					
 		this.getNextToken();				
 		while( token.getClasse() == TokensClasse.VIRGULA.getClasse() ){
 			
@@ -210,8 +229,8 @@ public class Parser{
 				this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "identificador(es)", token.getLexema());
 			}
 			
-			var = new Variavel( tipoPego.getClasse(), token.getLexema());			
-			this.variaveisEscopo.add(var);	
+			
+			this.tabelaSimbolos.add( new Variavel( this.tabelaSimbolos.getTipoPR(tipoPego), token.getLexema()) );
 			
 			
 			this.getNextToken();
@@ -220,6 +239,16 @@ public class Parser{
 		if( token.getClasse() != TokensClasse.PONTO_VIRGULA.getClasse() ) {//erro, deve ter um identificador				
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), ";", token.getLexema());
 		}		
+		
+		
+		/*Grau topo = this.tabelaSimbolos.pilha.pop();
+		for(Variavel var : topo.getVarLista()) {
+			System.out.println("TIPO VAR: "+var.getTipoVar());
+			System.out.println("LEXE VAR: "+var.getNomeVar());
+		}
+		this.tabelaSimbolos.pilha.push(topo);
+		System.out.println(" ");
+		*/
 		this.getNextToken();
 	}
 	
@@ -289,15 +318,26 @@ public class Parser{
 		return false;
 	}
 	public void expRelacional() {
+		int esqRel, dirRel = -1;
 		
-		this.expAritmetica();
+		esqRel = this.expAritmetica();
 		
 		
 		if( this.isOpRelacional() ) {
 			this.getNextToken();			
-			this.expAritmetica();	
+			dirRel = this.expAritmetica();	
 		}
 		
+		if(dirRel != -1) {
+			if(esqRel != dirRel) {
+				if(esqRel == TokensClasse.CARACTER.getClasse() || dirRel == TokensClasse.CARACTER.getClasse()) {
+					System.out.println("CHAR SÓ PODE SER COMPARADO COM O MESMO TIPO, "+this.lexer.getPosicaoArquivo());	
+				}
+				
+			}
+		}else {
+			
+		}
 		
 	}
 
@@ -421,19 +461,37 @@ public class Parser{
 		}
 		return false;
 	}
-	public void expAritmetica() {
-		this.termo();
+	public int expAritmetica() {
+		int ladoEsq = this.termo();
 				
-		exp();
+		int ladoDir = this.exp();
+		
+		//System.out.print("ESQ :"+ladoEsq);
+		//System.out.println(" ==== DIR :"+ladoDir);
+		
+		if(ladoDir != -1) {
+			return this.checker.typeCheck(ladoEsq, ladoDir);
+		}
+		return ladoEsq;
+					
+		
 	}
-	private void exp() {
+	private int exp() {
+		int ladoEsq = -1;
+		int ladoDir;
 		
 		if( token.getClasse() == TokensClasse.SOMA.getClasse() || token.getClasse() == TokensClasse.SUBTRACAO.getClasse() ) {			
 			this.getNextToken();
-			this.termo();
-			this.exp();
-			//this.expAritmetica();
+			ladoEsq = this.termo();
+			ladoDir = this.exp();
+						
+			if(ladoDir != -1) {
+				ladoEsq =  checker.typeCheck(ladoEsq, ladoDir);
+			}else {
+				return ladoEsq;
+			}
 		}
+		return ladoEsq;
 	}
 	
 		
@@ -445,14 +503,39 @@ public class Parser{
 		}
 		return false;
 	}	
-	public void termo() {
-		this.fator();
-				
+	public int termo() {
+		int ladoEsq = this.fator();		
+		int ladoDir;
+		Token div= token;
+		
 		while( token.getClasse() == TokensClasse.MULTIPLICAO.getClasse() || token.getClasse() == TokensClasse.DIVISAO.getClasse() ) {	
 			this.getNextToken();
-			this.fator();
-			
-		}		
+			ladoDir = this.fator();			
+
+						
+			if( div.getClasse() == TokensClasse.DIVISAO.getClasse() ) {				
+				
+				if(ladoEsq == TokensClasse.CARACTER.getClasse()) {
+					if(ladoDir != TokensClasse.CARACTER.getClasse()) {
+						System.out.println("CHAR SÓ PODE SER DIVIDIDO POR CHAR " + this.lexer.getPosicaoArquivo());
+						System.exit(1);
+					}
+					ladoEsq = TokensClasse.CARACTER.getClasse();
+				}else
+				if(ladoEsq == TokensClasse.INTEIRO.getClasse() || ladoDir == TokensClasse.INTEIRO.getClasse() || ladoEsq == TokensClasse.DECIMAL.getClasse() || ladoDir == TokensClasse.DECIMAL.getClasse()) {
+					ladoEsq = TokensClasse.DECIMAL.getClasse(); //converte em DECIMAL	
+				}else {
+					System.out.println("DIVISÂO DE VALORES INVALIDOS " + this.lexer.getPosicaoArquivo());
+					System.exit(1);
+				}	
+			}else {			
+				ladoEsq = checker.typeCheck(ladoEsq, ladoDir);
+			}
+					
+
+		}
+		return ladoEsq;
+		
 	}
 	
 	
@@ -470,20 +553,25 @@ public class Parser{
 		}
 		return false;
 	}
-	public void fator() {
+	public int fator() {
+		
+		int tipo = token.getClasse();
+		String lex = token.getLexema();
+		
 		
 		if( token.getClasse() == TokensClasse.IDENTIFICADOR.getClasse() ) {
+			tipo = this.tabelaSimbolos.getTipoPR(token); // tipo do identificador
 			this.getNextToken();
-		
+					
 		}else
 		if( token.getClasse() == TokensClasse.INTEIRO.getClasse() ||  token.getClasse() == TokensClasse.DECIMAL.getClasse() || token.getClasse() == TokensClasse.CARACTER.getClasse() ) {
-			this.getNextToken();
+			this.getNextToken();			
 		
 		}else		
 		if( token.getClasse() == TokensClasse.ABRE_PARENTESES.getClasse() ) {
 
 			this.getNextToken();
-			this.expAritmetica();			
+			tipo = this.expAritmetica();			
 			
 			if( token.getClasse() != TokensClasse.FECHA_PARENTESES.getClasse() ) {
 				//error, deveria ter uma fechamento de parenteses	
@@ -493,8 +581,29 @@ public class Parser{
 		}else {
 			// error, deveria ter uma abertura de parenteses, identificador ou uma variavel de tipo valido
 			this.error.tokenErrado(lexer.getPosicaoArquivo().toString(), "variavel, '(' ou [interiro, float, char] ", token.getLexema());
-		}
+		}		
 		
+		// caso tenhamos ((( var || 1 || 'c' ))) entramos recursivamente até o identificador ou valor
+		
+		if(tipo == -1){System.out.println("VARIAVEL '" +lex+ "' NÂO EXISTE; " + lexer.getPosicaoArquivo().toString());System.exit(0);}
+		return tipo;
+	}
+	private int getTipoDirAtribuicao() {
+		
+		if( token.getClasse() == TokensClasse.IDENTIFICADOR.getClasse() ) {
+			return TokensClasse.IDENTIFICADOR.getClasse();
+		}else
+		if( token.getClasse() == TokensClasse.INTEIRO.getClasse() ) {
+			return TokensClasse.INTEIRO.getClasse();
+		}else
+		if( token.getClasse() == TokensClasse.CARACTER.getClasse() ) {
+			return TokensClasse.CARACTER.getClasse();
+		}else
+		if( token.getClasse() == TokensClasse.DECIMAL.getClasse() ) {
+			return TokensClasse.DECIMAL.getClasse();
+		}else {
+			return -1; // trocar para código de erro
+		}
 		
 	}
 
