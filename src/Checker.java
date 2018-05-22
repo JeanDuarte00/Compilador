@@ -8,14 +8,10 @@ public class Checker {
 	public int typeCheck(int ladoEsq, int ladoDir) {
 		int tipo = -1;
 		
-		if(ladoEsq == TokensClasse.CARACTER.getClasse()) {
-			if(ladoDir != TokensClasse.CARACTER.getClasse()) {
-				tipo = TokensClasse.CARACTER.getClasse();
-			}else {
-				System.out.println("CHAR SÓ OPERA COM CHAR");
-				System.exit(1);
-			}
-			
+		
+		if(ladoEsq == TokensClasse.CARACTER.getClasse() || ladoDir == TokensClasse.CARACTER.getClasse()) {
+			tipo = TokensClasse.CARACTER.getClasse(); // se qualquer operação feita com char, deve retornar um char	
+		
 		}else if(ladoEsq == ladoDir) {
 			tipo = ladoEsq; // qualquer um tem o mesmo efeito
 		
@@ -45,12 +41,10 @@ public class Checker {
 					//System.out.println("ident = (float)" + tipoValor);
 					tipoValor = TokensClasse.DECIMAL.getClasse(); // convertendo INT em DECIMAL para salvar na variavel
 					return tipoValor;
-				}else {
-					System.out.println("ATRIBUIÇÂO COM TIPOS NÂO COMPATIVEIS; DECIMAL RECEBE INTEIRO E DECIMAL");
+				}else {					
 					return -1;
 				}
-			}
-			System.out.println("ATRIBUIÇÂO COM TIPOS NÂO COMPATIVEIS; CONVERSÂO DE TIPOS INVALIDA");			
+			}						
 			return -1; // apenas float pode receber outro tipo convertido, portanto erro para qualquer outra combinação
 		}
 		

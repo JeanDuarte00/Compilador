@@ -160,7 +160,7 @@ public class Parser{
 		
 		//procura saber se existe a variavel no programa, não apenas no escopo
 		if( this.tabelaSimbolos.existe(new Variavel(token.getClasse(), token.getLexema())) == null) {
-			System.out.println("VARIAVEL NÂO DECLARADA, NÂO PODE FAZER ATRIBUIÇÂO " +this.lexer.getPosicaoArquivo());
+			this.error.canNotAtrib(this.lexer.getPosicaoArquivo().toString());
 		}
 			
 		this.ladoEsqAtrib = this.tabelaSimbolos.getTipoPR(token); // tipo do identificador
@@ -180,8 +180,7 @@ public class Parser{
 					// verifica se é possivel fazer atribuição
 					this.ladoDirAtrib = checker.atribCheck(this.ladoEsqAtrib, this.ladoDirAtrib);
 					if( this.ladoDirAtrib == -1 ) {
-						System.out.println(lexer.getPosicaoArquivo());
-						System.exit(1); // tipo de atribuição invalido
+						this.error.imcompatibleTypes(this.lexer.getPosicaoArquivo().toString());
 					}
 					
 					
@@ -517,16 +516,14 @@ public class Parser{
 				
 				if(ladoEsq == TokensClasse.CARACTER.getClasse()) {
 					if(ladoDir != TokensClasse.CARACTER.getClasse()) {
-						System.out.println("CHAR SÓ PODE SER DIVIDIDO POR CHAR " + this.lexer.getPosicaoArquivo());
-						System.exit(1);
+						this.error.charOnlyDivChar(this.lexer.getPosicaoArquivo().toString(), token.getLexema());
 					}
 					ladoEsq = TokensClasse.CARACTER.getClasse();
 				}else
 				if(ladoEsq == TokensClasse.INTEIRO.getClasse() || ladoDir == TokensClasse.INTEIRO.getClasse() || ladoEsq == TokensClasse.DECIMAL.getClasse() || ladoDir == TokensClasse.DECIMAL.getClasse()) {
 					ladoEsq = TokensClasse.DECIMAL.getClasse(); //converte em DECIMAL	
 				}else {
-					System.out.println("DIVISÂO DE VALORES INVALIDOS " + this.lexer.getPosicaoArquivo());
-					System.exit(1);
+					this.error.canNotDiv(this.lexer.getPosicaoArquivo().toString());
 				}	
 			}else {			
 				ladoEsq = checker.typeCheck(ladoEsq, ladoDir);
@@ -585,7 +582,9 @@ public class Parser{
 		
 		// caso tenhamos ((( var || 1 || 'c' ))) entramos recursivamente até o identificador ou valor
 		
-		if(tipo == -1){System.out.println("VARIAVEL '" +lex+ "' NÂO EXISTE; " + lexer.getPosicaoArquivo().toString());System.exit(0);}
+		if(tipo == -1){
+			this.error.variavelNaoExiste(lexer.getPosicaoArquivo().toString(), lex);
+		}
 		return tipo;
 	}
 	private int getTipoDirAtribuicao() {
