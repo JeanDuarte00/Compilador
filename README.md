@@ -6,7 +6,7 @@
 
 - [x] Analisador Semântico
 
-- [ ] Gerador de Código
+- [x] Gerador de Código
 
 ### Passando arquivo argumento pelo eclipse
 
