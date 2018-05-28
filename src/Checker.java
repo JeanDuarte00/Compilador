@@ -9,17 +9,16 @@ public class Checker {
 		int tipo = -1;
 		
 		
-		if(ladoEsq == TokensClasse.CARACTER.getClasse() || ladoDir == TokensClasse.CARACTER.getClasse()) {
-			tipo = TokensClasse.CARACTER.getClasse(); // se qualquer operação feita com char, deve retornar um char	
-		
-		}else if(ladoEsq == ladoDir) {
+		if(ladoEsq == ladoDir) {
 			tipo = ladoEsq; // qualquer um tem o mesmo efeito
 		
-		}else if(ladoEsq == TokensClasse.DECIMAL.getClasse() || ladoDir == TokensClasse.DECIMAL.getClasse()) {
-			tipo = TokensClasse.DECIMAL.getClasse();
+		}else if( (ladoEsq == TokensClasse.DECIMAL.getClasse() && ladoDir == TokensClasse.INTEIRO.getClasse()) || (ladoEsq == TokensClasse.INTEIRO.getClasse() && ladoDir == TokensClasse.DECIMAL.getClasse()) ) {
+			tipo = TokensClasse.DECIMAL.getClasse(); // casting de tipo float e int, qualquer relação floar com int retorna float
+		
+		}else if(ladoEsq == TokensClasse.CARACTER.getClasse() && ladoDir == TokensClasse.CARACTER.getClasse()) {
+			tipo = TokensClasse.CARACTER.getClasse(); // se qualquer operação feita com char, deve retornar um char	
 		
 		}		
-		
 		return tipo;
 	}
 	

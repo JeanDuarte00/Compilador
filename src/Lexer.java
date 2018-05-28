@@ -356,7 +356,7 @@ public class Lexer {
 				if(this.caracter == '\'') {
 					
 					this.getNextChar();
-					return new Token(TokensClasse.CARACTER.getClasse(), this.frase);
+					return new Token(TokensClasse.CARACTER.getClasse(), "'"+this.frase+"'");
 				}else {
 					this.erro.logError(6, this.indicador.toString(), this.caracter);
 				

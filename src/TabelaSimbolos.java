@@ -16,26 +16,7 @@ public class TabelaSimbolos {
 	
 	
 	public int getTipoPR(Token varCheck) {
-		
-		/*Grau helper = this.pilha.pop();	//variaveis do escopo atual	
-		
-		for(Variavel var : helper.getVarLista()) {
-			if(var.getNomeVar().equals(varCheck.lexema) ) {
-				this.pilha.push(helper);
-				
-				if(var.getTipoVar() == TokensClasse.PR_FLOAT.getClasse()) {
-					return TokensClasse.DECIMAL.getClasse();
-				}else
-				if(var.getTipoVar() == TokensClasse.PR_CHAR.getClasse()) {
-					return TokensClasse.CARACTER.getClasse();
-				}else
-				if(var.getTipoVar() == TokensClasse.PR_INT.getClasse()) {
-					return TokensClasse.INTEIRO.getClasse();
-				}
-			}
-		}*/
-		
-		
+			
 		if(varCheck.getClasse() == TokensClasse.PR_FLOAT.getClasse()) {
 			return TokensClasse.DECIMAL.getClasse();
 			

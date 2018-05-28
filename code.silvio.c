@@ -1,9 +1,12 @@
 int main (){
 
-	int x;
+	float x;
 	int a;
-
-
+	char c;
+	
+	x = (2/3)*(9/4)*(3/1);
+	
+/*
 	while(1<2){
 		float a;
 		//int a;
@@ -12,13 +15,14 @@ int main (){
 		a = x - 1*((3-2)-(x+a)/4);
 	}	
 
-	if(2 > a){
+	if('2' > 'a'){
 		x = 3;	
 		if(a<x){
 			char c;
+			int y;
 			c = c/'3';
-			y = 3  - 2 + x ;		
+			x = 3  - 2 + x - y;		
 		}
 	}
-
+*/
 }
